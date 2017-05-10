@@ -1,3 +1,4 @@
+package examples.kdexamples;
 // Illustrates n-nearest-neighbors method of KDTree class.  Creates a KDTree
 // of M keys, and finds N neighbors of D-dimensional point in center of space
 // (all coords = 0.5), with N, D, M specified on command line.

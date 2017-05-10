@@ -1,4 +1,5 @@
-// Illustrates distance-based nearest-neighbors method of KDTree class.  Creates 
+package examples.kdexamples;
+// Illustrates distance-based nearest-neighbors method of KDTree class.  Creates
 // a KDTree of M keys, and finds neighbors of D-dimensional point in center of 
 // space with distance Hamming distance H (all coords = 0.5), with H, D, M 
 // specified on command line.

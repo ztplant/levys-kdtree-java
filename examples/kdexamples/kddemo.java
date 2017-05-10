@@ -1,3 +1,4 @@
+package examples.kdexamples;
 // illustrates behavior of KDTree class
 
 import edu.wlu.cs.levy.CG.KDTree;

@@ -214,9 +214,8 @@ public class KDTree<T> {
     * a given key.
     *
     * @param key key for KD-tree node
-    * @param d Euclidean distance
-    *
-    * @return objects at nodes with distance of key, or null on failure
+    * @param dist
+     * @return objects at nodes with distance of key, or null on failure
     *
     * @throws KeySizeException if key.length mismatches K
     
@@ -232,9 +231,8 @@ public class KDTree<T> {
     * a given key.
     *
     * @param key key for KD-tree node
-    * @param d Hamming distance
-    *
-    * @return objects at nodes with distance of key, or null on failure
+    * @param dist
+     * @return objects at nodes with distance of key, or null on failure
     *
     * @throws KeySizeException if key.length mismatches K
     

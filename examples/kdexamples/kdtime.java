@@ -1,3 +1,4 @@
+package examples.kdexamples;
 // illustrates differences between KD tree search and exhaustive search
 
 import edu.wlu.cs.levy.CG.KDTree;

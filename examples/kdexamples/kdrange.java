@@ -1,3 +1,4 @@
+package examples.kdexamples;
 // illustrates behavior of KDTree range search
 
 import edu.wlu.cs.levy.CG.KDTree;
