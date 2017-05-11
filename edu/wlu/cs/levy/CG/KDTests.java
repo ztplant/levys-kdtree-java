@@ -32,7 +32,8 @@ public class KDTests {
     }
 
 
-    @Test public void testNearestNeighborList() {
+    @Test
+    public void testNearestNeighborList() {
         NearestNeighborList<String> nnl = new NearestNeighborList<String>(3);
         nnl.insert("A", 3.0);
         nnl.insert("B", 2.0);
@@ -46,7 +47,8 @@ public class KDTests {
         Assert.assertEquals("D", nnl.removeHighest());
     }
 
-    @Test public void testNearestNeighbor() throws KDException {
+    @Test
+    public void testNearestNeighbor() throws KDException {
         int dims = 3;
         int samples = 300;
         KDTree<Integer> kt = new KDTree<Integer>(dims);
@@ -82,7 +84,8 @@ public class KDTests {
         }
     }
 
-    @Test public void testRange() throws KDException {
+    @Test
+    public void testRange() throws KDException {
         int dims = 2;
         KDTree<Object> kt = new KDTree<Object>(dims);
         double [] p0 = { 0.5, 0.5 };
@@ -104,7 +107,8 @@ public class KDTests {
         Assert.assertEquals(1, rv.size());
     }
 
-    @Test public void testSearch() throws KDException {
+    @Test
+    public void testSearch() throws KDException {
         int dims = 3;
         int samples = 300;
         KDTree<Object> kt = new KDTree<Object>(dims);
@@ -126,7 +130,8 @@ public class KDTests {
 
     }
 
-    @Test public void testDelete() throws KDException {
+    @Test
+    public void testDelete() throws KDException {
         int dims = 3;
         KDTree<Object> kt = new KDTree<Object>(dims);
         double [] targ = makeSample(dims);
@@ -142,7 +147,8 @@ public class KDTests {
         Assert.assertEquals(0, kt.size());
     }
 
-    @Test public void testEditing() throws KDException {
+    @Test
+    public void testEditing() throws KDException {
         int dims = 3;
         KDTree<Object> kt = new KDTree<Object>(dims);
         double [] targ = makeSample(dims);

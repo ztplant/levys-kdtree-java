@@ -14,10 +14,10 @@ class KDNode<T> {
 
     // Method ins translated from 352.ins.c of Gonnet & Baeza-Yates
     protected static <T> int edit(HPoint key, Editor<T> editor, KDNode<T> t, int lev, int K)
- 	throws KeyDuplicateException {
+ 	    throws KeyDuplicateException {
         KDNode<T> next_node = null;
         int next_lev = (lev+1) % K;
-	synchronized (t) {
+	    synchronized (t) {
             if (key.equals(t.k)) {
                 boolean was_deleted = t.deleted;
                 t.v = editor.edit(t.deleted ? null : t.v );
@@ -43,7 +43,7 @@ class KDNode<T> {
                     return t.left.deleted ? 0 : 1;
                 }                
             }
-	}
+	    }
 
         return edit(key, editor, next_node, next_lev, K);
     }
@@ -54,7 +54,7 @@ class KDNode<T> {
         if (t.v == null) {
             t.deleted = true;
         }
-        return t;            
+        return t;
     }
 
     protected static <T> boolean del(KDNode<T> t) {
@@ -70,30 +70,30 @@ class KDNode<T> {
     // Method srch translated from 352.srch.c of Gonnet & Baeza-Yates
     protected static <T> KDNode<T> srch(HPoint key, KDNode<T> t, int K) {
 
-	for (int lev=0; t!=null; lev=(lev+1)%K) {
+        for (int lev=0; t!=null; lev=(lev+1)%K) {
 
-	    if (!t.deleted && key.equals(t.k)) {
-		return t;
-	    }
-	    else if (key.coord[lev] > t.k.coord[lev]) {
-		t = t.right;
-	    }
-	    else {
-		t = t.left;
-	    }
-	}
+            if (!t.deleted && key.equals(t.k)) {
+                return t;
+            }
+            else if (key.coord[lev] > t.k.coord[lev]) {
+                t = t.right;
+            }
+            else {
+                t = t.left;
+            }
+        }
 
-	return null;
+	    return null;
     }
 
     // Method rsearch translated from 352.range.c of Gonnet & Baeza-Yates
     protected static <T> void rsearch(HPoint lowk, HPoint uppk, KDNode<T> t, int lev,
 				  int K, List<KDNode<T>> v) {
 
-	if (t == null) return;
-	if (lowk.coord[lev] <= t.k.coord[lev]) {
-	    rsearch(lowk, uppk, t.left, (lev+1)%K, K, v);
-	}
+        if (t == null) return;
+        if (lowk.coord[lev] <= t.k.coord[lev]) {
+            rsearch(lowk, uppk, t.left, (lev+1)%K, K, v);
+        }
         if (!t.deleted) {
             int j = 0;
             while (j<K && lowk.coord[j]<=t.k.coord[j] && 
@@ -102,9 +102,9 @@ class KDNode<T> {
             }
             if (j==K) v.add(t);
         }
-	if (uppk.coord[lev] > t.k.coord[lev]) {
-	    rsearch(lowk, uppk, t.right, (lev+1)%K, K, v);
-	}
+        if (uppk.coord[lev] > t.k.coord[lev]) {
+            rsearch(lowk, uppk, t.right, (lev+1)%K, K, v);
+        }
     }
 
     // Method Nearest Neighbor from Andrew Moore's thesis. Numbered
@@ -177,8 +177,7 @@ class KDNode<T> {
 
        if (!nnl.isCapacityReached()) {
            dist_sqd = Double.MAX_VALUE;
-       }
-       else {
+       } else {
            dist_sqd = nnl.getMaxPriority();
        }
 
@@ -226,40 +225,40 @@ class KDNode<T> {
     // constructor is used only by class; other methods are static
     private KDNode(HPoint key, T val) {
 	
-	k = key;
-	v = val;
-	left = null;
-	right = null;
-	deleted = false;
+        k = key;
+        v = val;
+        left = null;
+        right = null;
+        deleted = false;
     }
 
     protected String toString(int depth) {
-	String s = k + "  " + v + (deleted ? "*" : "");
-	if (left != null) {
-	    s = s + "\n" + pad(depth) + "L " + left.toString(depth+1);
-	}
-	if (right != null) {
-	    s = s + "\n" + pad(depth) + "R " + right.toString(depth+1);
-	}
-	return s;
+        String s = k + "  " + v + (deleted ? "*" : "");
+        if (left != null) {
+            s = s + "\n" + pad(depth) + "L " + left.toString(depth+1);
+        }
+        if (right != null) {
+            s = s + "\n" + pad(depth) + "R " + right.toString(depth+1);
+        }
+        return s;
     }
 
     private static String pad(int n) {
-	String s = "";
-	for (int i=0; i<n; ++i) {
-	    s += " ";
-	}
-	return s;
+        String s = "";
+        for (int i=0; i<n; ++i) {
+            s += " ";
+        }
+        return s;
     }
 
     private static void hrcopy(HRect hr_src, HRect hr_dst) {
-	hpcopy(hr_src.min, hr_dst.min);
-	hpcopy(hr_src.max, hr_dst.max);
+        hpcopy(hr_src.min, hr_dst.min);
+        hpcopy(hr_src.max, hr_dst.max);
     }
 
     private static void hpcopy(HPoint hp_src, HPoint hp_dst) {
-	for (int i=0; i<hp_dst.coord.length; ++i) {
-	    hp_dst.coord[i] = hp_src.coord[i];
-	}
+        for (int i=0; i<hp_dst.coord.length; ++i) {
+            hp_dst.coord[i] = hp_src.coord[i];
+        }
     }
 }

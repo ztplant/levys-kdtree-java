@@ -60,10 +60,11 @@ public class KDTree<T> {
     public KDTree(int k) {
         this(k, 0);
     }
+
     public KDTree(int k, long timeout) {
         this.m_timeout = timeout;
-	m_K = k;
-	m_root = null;
+        m_K = k;
+        m_root = null;
     }
     
     
@@ -85,8 +86,8 @@ public class KDTree<T> {
     * @throws KeySizeException if key.length mismatches K
     * @throws KeyDuplicateException if key already in tree
     */
-    public void insert(double [] key, T value) 
-    throws KeySizeException, KeyDuplicateException {
+    public void insert(double [] key, T value)
+            throws KeySizeException, KeyDuplicateException {
         this.edit(key, new Editor.Inserter<T>(value));
     }
     
@@ -100,12 +101,12 @@ public class KDTree<T> {
     * @throws KeyDuplicateException if key already in tree
     */
     
-    public void edit(double [] key, Editor<T> editor) 
-    throws KeySizeException, KeyDuplicateException {
+    public void edit(double [] key, Editor<T> editor)
+            throws KeySizeException, KeyDuplicateException {
 	
-	if (key.length != m_K) {
-	    throw new KeySizeException();
-	}
+        if (key.length != m_K) {
+            throw new KeySizeException();
+        }
 	
         synchronized (this) {
             // the first insert has to be synchronized
@@ -114,7 +115,7 @@ public class KDTree<T> {
                 m_count = m_root.deleted ? 0 : 1;
                 return;
             }
-	}
+	    }
 	
         m_count += KDNode.edit(new HPoint(key), editor, m_root, 0, m_K);
     }
@@ -131,18 +132,18 @@ public class KDTree<T> {
     */
     public T search(double [] key) throws KeySizeException {
 	
-	if (key.length != m_K) {
-	    throw new KeySizeException();
-	}
-	
-	KDNode<T> kd = KDNode.srch(new HPoint(key), m_root, m_K);
-	
-	return (kd == null ? null : kd.v);
+        if (key.length != m_K) {
+            throw new KeySizeException();
+        }
+
+        KDNode<T> kd = KDNode.srch(new HPoint(key), m_root, m_K);
+
+        return (kd == null ? null : kd.v);
     }
     
     
     public void delete(double [] key) 
-    throws KeySizeException, KeyMissingException {
+        throws KeySizeException, KeyMissingException {
         delete(key, false);
     }
     /** 
@@ -157,18 +158,17 @@ public class KDTree<T> {
     * @throws KeyMissingException if no node in tree has key
     */
     public void delete(double [] key, boolean optional) 
-    throws KeySizeException, KeyMissingException {
-	
-	if (key.length != m_K) {
-	    throw new KeySizeException();
-	}
+        throws KeySizeException, KeyMissingException {
+
+        if (key.length != m_K) {
+            throw new KeySizeException();
+        }
         KDNode<T> t = KDNode.srch(new HPoint(key), m_root, m_K);
         if (t == null) {
-            if (optional == false) {
+            if (!optional) {
                 throw new KeyMissingException();
             }
-        }
-        else {
+        } else {
             if (KDNode.del(t)) {
                 m_count--;
             }
@@ -188,8 +188,8 @@ public class KDTree<T> {
     */
     public T nearest(double [] key) throws KeySizeException {
 	
-	List<T> nbrs = nearest(key, 1, null);
-	return nbrs.get(0);
+        List<T> nbrs = nearest(key, 1, null);
+        return nbrs.get(0);
     }
     
     /**
@@ -205,7 +205,7 @@ public class KDTree<T> {
     
     */
     public List<T> nearest(double [] key, int n) 
-    throws KeySizeException, IllegalArgumentException {
+        throws KeySizeException, IllegalArgumentException {
         return nearest(key, n, null);
     }
     
@@ -215,13 +215,13 @@ public class KDTree<T> {
     *
     * @param key key for KD-tree node
     * @param dist
-     * @return objects at nodes with distance of key, or null on failure
+    * @return objects at nodes with distance of key, or null on failure
     *
     * @throws KeySizeException if key.length mismatches K
     
     */
     public List<T> nearestEuclidean(double [] key, double dist) 
-    throws KeySizeException {
+        throws KeySizeException {
 	return nearestDistance(key, dist, new EuclideanDistance());
     }
     
@@ -238,7 +238,7 @@ public class KDTree<T> {
     
     */
     public List<T> nearestHamming(double [] key, double dist) 
-    throws KeySizeException {
+        throws KeySizeException {
 	
 	return nearestDistance(key, dist, new HammingDistance());
    }
@@ -260,23 +260,23 @@ public class KDTree<T> {
     * exceeds tree size 
     */
     public List<T> nearest(double [] key, int n, Checker<T> checker) 
-    throws KeySizeException, IllegalArgumentException {
+        throws KeySizeException, IllegalArgumentException {
 	
-	if (n <= 0) {
+        if (n <= 0) {
             return new LinkedList<T>();
-	}
+        }
 	
-	NearestNeighborList<KDNode<T>> nnl = getnbrs(key, n, checker);
+	    NearestNeighborList<KDNode<T>> nnl = getnbrs(key, n, checker);
 	
         n = nnl.getSize();
         Stack<T> nbrs = new Stack<T>();
         
-	for (int i=0; i<n; ++i) {
-	    KDNode<T> kd = nnl.removeHighest();
+        for (int i=0; i<n; ++i) {
+            KDNode<T> kd = nnl.removeHighest();
             nbrs.push(kd.v);
-	}
+        }
 	
-	return nbrs;
+	    return nbrs;
     }
     
     
@@ -292,26 +292,26 @@ public class KDTree<T> {
     * @throws KeySizeException on mismatch among lowk.length, uppk.length, or K
     */
     public List<T> range(double [] lowk, double [] uppk) 
-    throws KeySizeException {
+        throws KeySizeException {
 	
-	if (lowk.length != uppk.length) {
-	    throw new KeySizeException();
-	}
-	
-	else if (lowk.length != m_K) {
-	    throw new KeySizeException();
-	}
-	
-	else {
-	    List<KDNode<T>> found = new LinkedList<KDNode<T>>();
-	    KDNode.rsearch(new HPoint(lowk), new HPoint(uppk), 
-	    m_root, 0, m_K, found);
-            List<T> o = new LinkedList<T>();
-            for (KDNode<T> node : found) {
-                o.add(node.v);
-	    }
-	    return o;
-	}
+        if (lowk.length != uppk.length) {
+            throw new KeySizeException();
+        }
+
+        else if (lowk.length != m_K) {
+            throw new KeySizeException();
+        }
+
+        else {
+            List<KDNode<T>> found = new LinkedList<KDNode<T>>();
+            KDNode.rsearch(new HPoint(lowk), new HPoint(uppk),
+            m_root, 0, m_K, found);
+                List<T> o = new LinkedList<T>();
+                for (KDNode<T> node : found) {
+                    o.add(node.v);
+            }
+            return o;
+        }
     }
     
     public int size() { /* added by MSL */
@@ -323,54 +323,51 @@ public class KDTree<T> {
     }
     
     private NearestNeighborList<KDNode<T>> getnbrs(double [] key) 
-    throws KeySizeException {
-	return getnbrs(key, m_count, null);
+        throws KeySizeException {
+        return getnbrs(key, m_count, null);
     }
     
     
-    private NearestNeighborList<KDNode<T>> getnbrs(double [] key, int n, 
-    Checker<T> checker) throws KeySizeException {
+    private NearestNeighborList<KDNode<T>> getnbrs(double [] key, int n, Checker<T> checker)
+            throws KeySizeException {
 	
-	if (key.length != m_K) {
-	    throw new KeySizeException();
-	}
-	
-	NearestNeighborList<KDNode<T>> nnl = new NearestNeighborList<KDNode<T>>(n);
-	
-	// initial call is with infinite hyper-rectangle and max distance
-	HRect hr = HRect.infiniteHRect(key.length);
-	double max_dist_sqd = Double.MAX_VALUE;
-	HPoint keyp = new HPoint(key);
-	
-        if (m_count > 0) {
-            long timeout = (this.m_timeout > 0) ? 
-	    (System.currentTimeMillis() + this.m_timeout) : 
-	    0;
-            KDNode.nnbr(m_root, keyp, hr, max_dist_sqd, 0, m_K, nnl, checker, timeout);
+        if (key.length != m_K) {
+            throw new KeySizeException();
         }
+
+	    NearestNeighborList<KDNode<T>> nnl = new NearestNeighborList<KDNode<T>>(n);
 	
-	return nnl;
+        // initial call is with infinite hyper-rectangle and max distance
+        HRect hr = HRect.infiniteHRect(key.length);
+        double max_dist_sqd = Double.MAX_VALUE;
+        HPoint keyp = new HPoint(key);
+
+            if (m_count > 0) {
+                long timeout = (this.m_timeout > 0) ? (System.currentTimeMillis() + this.m_timeout) : 0;
+                KDNode.nnbr(m_root, keyp, hr, max_dist_sqd, 0, m_K, nnl, checker, timeout);
+            }
+
+        return nnl;
 	
     }
     
-    private  List<T> nearestDistance(double [] key, double dist, 
-    DistanceMetric metric) throws KeySizeException {
+    private  List<T> nearestDistance(double [] key, double dist, DistanceMetric metric)
+            throws KeySizeException {
 	
-	NearestNeighborList<KDNode<T>> nnl = getnbrs(key);	    
-	int n = nnl.getSize();
-	Stack<T> nbrs = new Stack<T>();
-	
-	for (int i=0; i<n; ++i) {
-	    KDNode<T> kd = nnl.removeHighest();
-	    HPoint p = kd.k;
-	    if (metric.distance(kd.k.coord, key) < dist) {
-		nbrs.push(kd.v);
-	    }
-	}
-	
-	return nbrs;
-    }
+        NearestNeighborList<KDNode<T>> nnl = getnbrs(key);
+        int n = nnl.getSize();
+        Stack<T> nbrs = new Stack<T>();
 
+        for (int i=0; i<n; ++i) {
+            KDNode<T> kd = nnl.removeHighest();
+            HPoint p = kd.k;
+            if (metric.distance(kd.k.coord, key) < dist) {
+            nbrs.push(kd.v);
+            }
+        }
+
+        return nbrs;
+    }
 
 }
 
